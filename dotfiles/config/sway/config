@@ -9,6 +9,8 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
+#wmname LG3D
+xwayland enable
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -29,32 +31,39 @@ font pango:Ubuntu Mono 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# start a terminal (urxvt)
-# bindsym $mod+Return exec urxvt -e /usr/bin/zsh
-
-# start termite
-bindsym $mod+Return exec termite
+# start a terminal
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
-#bindsym $mod+d exec j4-dmenu-desktop --dmenu='bemenu -i --nb "#3f3f3f" --nf "#dcdccc" --fn "pango:Ubunut Mono 10"' --term='termite'
+# start dmenu (a program launcher)bindsym $mod+d exec dmenu_run
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+#bindsym $mod+d exec --no-startup-id bemenu-run --fn 'Ubuntu Mono' 8
 
-bindsym $mod+d exec termite --name=launcher -e ~/bin/launcher
+bindsym $mod+d exec alacritty --class=launcher -e launcher
 
 for_window [app_id="^launcher$"] floating enable, border none
 
+# change focus
+#bindsym $mod+j focus left
+#bindsym $mod+k focus down
+#bindsym $mod+l focus up
+#bindsym $mod+semicolon focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
+
+# move focused window
+#bindsym $mod+Shift+j move left
+#bindsym $mod+Shift+k move down
+#bindsym $mod+Shift+l move up
+#bindsym $mod+Shift+semicolon move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -124,11 +133,10 @@ bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
-
-# reload the configuration file
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r reload
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your session.' -B 'Exit' 'i3-msg exit'"
+bindsym $mod+Shift+e exec "swaymsg exit"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -155,46 +163,40 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-# lock screen command.
-bindsym $mod+Shift+l exec "swaylock-blur"
+bindsym $mod+r mode "resize"
+bindsym $mod+Shift+l exec "light-locker-command -l"
 
-# Right monitor bar. Comment out for single monitor setup.
-bar {
-   output HDMI-A-1
-   status_command /usr/bin/i3status-rs ~/.config/i3/status.toml
-   colors {
-        separator #666666
-        background #222222
-        statusline #222222
-       focused_workspace #0088CC #0088CC #ffffff
-        active_workspace #333333 #333333 #ffffff
-        inactive_workspace #333333 #333333 #888888
-        urgent_workspace #2f343a #900000 #ffffff
-    }
-    font pango:Ubuntu Mono, FontAwesome 10
-    position top
-    height 13
-}
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +3% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -3% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
-smart_borders on
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
+bindsym XF86Launch1 exec "sudo shutdown -h now"
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute 0 toggle
+
+hide_edge_borders both
 default_border none
 
-output HDMI-A-1 {
-  pos 0,0
-  bg `wallpaper` fill
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+	font pango:Ubuntu Mono, FontAwesome 11
+        status_command i3status-rs ~/.config/i3/status.toml
+	position top
+	height 13
+}
+
+output LVDS-1 {
+	dpms on
+	bg `wallpaper` fill
 }
 
 input * xkb_layout gb
 
-# gtk3 settings
+exec "redshift -c /home/rose/.config/redshift/redshift.conf"
+exec_always "xrdb ~/.Xresources"
 exec_always "gsettings set org.gnome.desktop.interface font-name 'Ubuntu 9'"
 exec_always "gsettings set org.gnome.desktop.interface gtk-theme 'Xfce'"
 
-# background apps that aren't systemd controlable.
-exec "mako"
-
-# reload each time.
-exec_always "xrdb -merge ~/.Xresources"
-
-# polybar
-# exec_always --no-startup-id $HOME/.config/polybar/launch.sh
