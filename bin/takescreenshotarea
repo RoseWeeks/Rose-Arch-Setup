@@ -1,0 +1,2 @@
+#!/bin/bash
+grim -g "$(slurp)" /home/rose/screenshots/screenshot-`date -Iseconds`.png

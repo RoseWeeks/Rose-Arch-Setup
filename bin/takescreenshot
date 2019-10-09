@@ -1,0 +1,2 @@
+#!/bin/bash
+grim /home/rose/screenshots/screenshot-`date -Iseconds`.png

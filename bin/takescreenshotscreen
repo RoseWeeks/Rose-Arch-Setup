@@ -1,0 +1,4 @@
+#!/bin/bash
+SCREEN="$(swaymsg -t get_outputs -r | jq -c '.[] | select( .focused == true ) | .name')"
+echo $SCREEN
+grim -o `echo "$SCREEN" | tr -d '"'` /home/rose/screenshots/singlscreen-`date -Iseconds`.png
