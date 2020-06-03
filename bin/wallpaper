@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import glob
 import random
 import sys
@@ -7,5 +8,7 @@ if len(args) == 0:
     args = [""]
 walls = list()
 for source in args:
-    walls += glob.glob("/home/rose/Dropbox/wp/" + source + "/*.*")
-print(random.choice(walls))
+    walls += glob.glob("/home/rweeks/Dropbox/wp/" + source + "/*.*")
+wallfile = random.choice(walls)
+print(wallfile)
+os.system('setwallpaper ' + wallfile)

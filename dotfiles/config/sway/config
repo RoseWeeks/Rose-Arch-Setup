@@ -152,16 +152,6 @@ bar {
 	height 12
 }
 
-output DP-1 {
-	bg `wallpaper` fill
-	position 1920,0
-}
-
-output DVI-I-1 {
-	bg `wallpaper` fill
-	position 0,0
-}
-
 input * xkb_layout gb
 
 exec swayidle -w \
@@ -173,6 +163,7 @@ exec swayidle -w \
 exec "redshift -c ~/.config/redshift/redshift.conf"
 
 exec_always {
+        wallpaper
 	xrdb ~/.Xresources
 	gsettings set org.gnome.desktop.interface font-name 'Ubuntu 9'
 	gsettings set org.gnome.desktop.interface gtk-theme 'Xfce'

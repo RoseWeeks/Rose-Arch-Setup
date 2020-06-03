@@ -1,5 +1,2 @@
 # Rose-Arch-Setup
-ArchLinux bootstrap and dotfiles
-
-## H
-
+ArchLinux dotfiles and helpers
